@@ -15,7 +15,7 @@ set ROOT=%~dp0
 rem Warnings
 set CXX_FLAGS=-Wall
 rem Architecture
-set CXX_FLAGS=%CXX_FLAGS% -m64 -msse4.2 -mfpmath=sse
+set CXX_FLAGS=%CXX_FLAGS% -m64 -msse4.2 -march=native -mfpmath=sse
 rem Compiling
 set CXX_FLAGS=%CXX_FLAGS% -std=c++17 -I ./include -fno-ident -static
 rem Assembly listing

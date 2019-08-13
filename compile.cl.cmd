@@ -30,7 +30,7 @@ set CL=%CL% /Oi /arch:AVX2 /Gv /fp:precise
 rem Exceptions
 set CL=%CXX_FLAGS% /EHa
 rem Compiling
-set CL=%CL% /std:c++17 /TP /Gm-
+set CL=%CL% /std:c++17 /TP /Gm- /Zi
 rem Assembly listing
 set CL=%CL% /Fa%IMMEDIATE_PATH%/app.asm /FAsu
 rem Includes
@@ -44,11 +44,11 @@ rem Libraries
 set LIB=%TOOLSET%\lib\x64;%WINSDK_LIB%\ucrt\x64;%WINSDK_LIB%\um\x64
 
 if "%CONFIG%"=="Debug" (
-  set CL=%CL% /MDd /Od /JMC /Zi
+  set CL=%CL% /MDd /Od /JMC
   set LINK=%LINK%
 )
 if "%CONFIG%"=="Release" (
-  set CL=%CL% /O2 /Oi /Gw /Gy /GL /MD /Zc:inline /Zi
+  set CL=%CL% /O2 /Gw /Gy /GL /MD /Zc:inline
   set LINK=%LINK% /RELEASE /OPT:REF /OPT:ICF
 )
 

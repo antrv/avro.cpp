@@ -33,6 +33,7 @@ int __cdecl main()
     std::string schema{"{\"type\":\"VAApplication\",\"name\":\"VAApplication\",\"namespace\":\"com.vertoanalytics.core.meters.datatypes\",\"fields\":[{\"name\":\"appIdentifier\",\"type\":\"string\"},{\"name\":\"appVersion\",\"type\":\"string\"},{\"name\":\"appDisplayName\",\"type\":[\"null\",\"string\"]},{\"name\":\"installTime\",\"type\":[\"null\",\"long\"]},{\"name\":\"lastUpdateTime\",\"type\":[\"null\",\"long\"]},{\"name\":\"appPublisher\",\"type\":[\"null\",\"string\"]},{\"name\":\"isSystemApp\",\"type\":[\"null\",\"boolean\"]},{\"name\":\"undefinedMetadata\",\"type\":[\"null\",{\"type\":\"map\",\"values\":\"string\"}]}]}"};
 
     std::ofstream file{"example.avro", std::ios::binary};
+
     avro::avro_writer<VAApplication> writer{file, std::move(schema)};
 
     //avro::binary_writer w{file};
@@ -41,7 +42,7 @@ int __cdecl main()
 
     VAApplication app{"app.exe", "1.0.0", "My super app", 1234567890, {}, "My publisher", false, {}};
     auto start = std::chrono::high_resolution_clock::now();
-    for (size_t i = 0; i < 1000000; i++)
+    for (size_t i = 0; i < 10000000; i++)
     {
         writer.write(app);
         writer.flush();
