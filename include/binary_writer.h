@@ -3,9 +3,11 @@
 #include <array>
 #include <cstdint>
 #include <map>
+#include <optional>
 #include <ostream>
 #include <string>
 #include <unordered_map>
+#include <variant>
 #include <vector>
 #include "fixed.h"
 
@@ -207,6 +209,27 @@ public:
         }
 
         write_zero();
+    }
+
+    template <class T>
+    inline void write(const std::optional<T> &value) const // union [null, T]
+    {
+        if (value.has_value())
+        {
+            write_signed_integer(1);
+            write(value.value());
+        }
+        else 
+        {
+            write_zero();
+        }
+    }
+
+    template <class ...Args>
+    inline void write(const std::variant<Args...> &value) const // union
+    {
+        write(value.index());
+        std::visit([*this](auto && item){ write(item); }, value);
     }
 
     template <class T, class = decltype(std::declval<T &>().write_to(std::declval<const binary_writer>()))>

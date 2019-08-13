@@ -1,4 +1,6 @@
 #include <fstream>
+#include <chrono>
+#include <iostream>
 #include "avro_writer.h"
 
 // sample
@@ -28,18 +30,23 @@ struct VAApplication
 
 int __cdecl main()
 {
-    using value_t = std::map<std::string, int32_t>;
-    using schema_t = std::vector<value_t>;
-
     std::string schema{"{\"type\":\"VAApplication\",\"name\":\"VAApplication\",\"namespace\":\"com.vertoanalytics.core.meters.datatypes\",\"fields\":[{\"name\":\"appIdentifier\",\"type\":\"string\"},{\"name\":\"appVersion\",\"type\":\"string\"},{\"name\":\"appDisplayName\",\"type\":[\"null\",\"string\"]},{\"name\":\"installTime\",\"type\":[\"null\",\"long\"]},{\"name\":\"lastUpdateTime\",\"type\":[\"null\",\"long\"]},{\"name\":\"appPublisher\",\"type\":[\"null\",\"string\"]},{\"name\":\"isSystemApp\",\"type\":[\"null\",\"boolean\"]},{\"name\":\"undefinedMetadata\",\"type\":[\"null\",{\"type\":\"map\",\"values\":\"string\"}]}]}"};
 
     std::ofstream file{"example.avro", std::ios::binary};
-    avro::avro_writer<schema_t> writer{file, std::move(schema)};
+    avro::avro_writer<VAApplication> writer{file, std::move(schema)};
 
-    value_t v1{{"hello", 123}, {"test", 1000}};
-    value_t v2{{"aaa", -100}, {"bbb", -1}};
-    schema_t v{std::move(v1), std::move(v2)};
+    //avro::binary_writer w{file};
+    //std::variant<int32_t, std::string> v{"hello world!"};
+    //w.write(v);
 
-    writer.write(v);
-    writer.flush();
+    VAApplication app{"app.exe", "1.0.0", "My super app", 1234567890, {}, "My publisher", false, {}};
+    auto start = std::chrono::high_resolution_clock::now();
+    for (size_t i = 0; i < 1000000; i++)
+    {
+        writer.write(app);
+        writer.flush();
+    }
+
+    auto finish = std::chrono::high_resolution_clock::now();
+    std::cout << "Time: " << std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count() << "ms\n";
 }

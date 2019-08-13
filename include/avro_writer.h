@@ -29,7 +29,9 @@ private:
     }
 
 public:
-    avro_writer(std::ostream &stream, std::string schema) noexcept : output_writer_{stream}, block_stream_{}, block_writer_{block_stream_}, header_{}
+    avro_writer(std::ostream &stream, std::string schema) noexcept : output_writer_{stream}, block_stream_{},
+                                                                     block_writer_{block_stream_},
+                                                                     header_{}, record_count_{}, is_header_written_{}
     {
         header_.init_magic();
         header_.generate_random_sync();
@@ -39,7 +41,7 @@ public:
 
     void write(const T &record)
     {
-        record_count_++;
+        ++record_count_;
         block_writer_.write(record);
     }
 
@@ -47,7 +49,6 @@ public:
     {
         if (!is_header_written_)
         {
-
             output_writer_.write(header_);
             is_header_written_ = true;
         }
@@ -56,6 +57,8 @@ public:
         {
             size_t size = block_stream_.tellp();
             const char *ptr = block_stream_.ptr();
+            output_writer_.write(record_count_);
+            output_writer_.write(size);
             output_writer_.write(ptr, size);
             output_writer_.write(header_.sync);
 

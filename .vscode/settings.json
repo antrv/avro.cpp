@@ -5,12 +5,13 @@
         "**/.tmp": true
     },
     "editor.lineNumbers": "on",
-    "editor.fontSize": 15,
+    "editor.fontSize": 16,
     "C_Cpp.default.cppStandard": "c++17",
     "C_Cpp.intelliSenseEngine": "Default",
     "C_Cpp.autocomplete": "Default",
     "C_Cpp.intelliSenseEngineFallback": "Disabled",
     "C_Cpp.enhancedColorization": "Enabled",
+    "editor.formatOnSave": true,
     "editor.tokenColorCustomizations": {
         "[Visual Studio Dark]": {
             "textMateRules": [
@@ -243,6 +244,7 @@
         "xutility": "cpp",
         "ostream": "cpp",
         "iosfwd": "cpp",
-        "sstream": "cpp"
+        "sstream": "cpp",
+        "variant": "cpp"
     }
 }
